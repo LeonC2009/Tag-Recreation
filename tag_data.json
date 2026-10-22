@@ -1,0 +1,480 @@
+{
+ "settings": {
+  "round_time": 120,
+  "buff_strength": 1.0,
+  "buff_duration": 1.0,
+  "buff_spawn": 8,
+  "max_pickups": 3,
+  "gravity": 0.7,
+  "move_speed": 1.0,
+  "jump_power": 1.0,
+  "air_jumps": 1,
+  "tramp": 1.0,
+  "pad": 1.0,
+  "dash": 1.0,
+  "tag_cd": 0.6,
+  "it_bonus": 0.1,
+  "buffs_on": true,
+  "theme": "desert"
+ },
+ "slots": [
+  "Leon",
+  "Aadit",
+  "Anant",
+  "Leon"
+ ],
+ "enabled": [
+  true,
+  true,
+  false,
+  false
+ ],
+ "dash_keys": [
+  "s",
+  "down",
+  "k",
+  "g"
+ ],
+ "profiles": {
+  "Player 1": {
+   "rating": 969.3500545374023,
+   "peak": 1000.0,
+   "matches": 7,
+   "losses": 3,
+   "survived": 4,
+   "total_hold": 516.7693333333394,
+   "longest_hold": 79.5220000000004,
+   "longest_hold_date": "2026-10-22 12:36",
+   "time_played": 840.083000000013,
+   "tags_made": 25,
+   "times_tagged": 25,
+   "pickups": 20,
+   "streak": 2,
+   "best_streak": 2,
+   "tagged": {
+    "Player 2": 11,
+    "Anant": 11,
+    "Player 4": 3
+   },
+   "history": [
+    1000.0,
+    980.4,
+    963.4,
+    970.1,
+    975.9,
+    955.3,
+    962.8,
+    969.4
+   ],
+   "color_idx": 0,
+   "created": "2026-10-22"
+  },
+  "Player 2": {
+   "rating": 1036.5694656572502,
+   "peak": 1036.5694656572502,
+   "matches": 2,
+   "losses": 0,
+   "survived": 2,
+   "total_hold": 36.03699999999953,
+   "longest_hold": 7.7870000000000354,
+   "longest_hold_date": "2026-10-22 12:36",
+   "time_played": 240.0263333333337,
+   "tags_made": 11,
+   "times_tagged": 11,
+   "pickups": 2,
+   "streak": 2,
+   "best_streak": 2,
+   "tagged": {
+    "Player 1": 11
+   },
+   "history": [
+    1000.0,
+    1019.6,
+    1036.6
+   ],
+   "color_idx": 1,
+   "created": "2026-10-22"
+  },
+  "Player 3": {
+   "rating": 1000.0,
+   "peak": 1000.0,
+   "matches": 0,
+   "losses": 0,
+   "survived": 0,
+   "total_hold": 0.0,
+   "longest_hold": 0.0,
+   "longest_hold_date": "",
+   "time_played": 0.0,
+   "tags_made": 0,
+   "times_tagged": 0,
+   "pickups": 0,
+   "streak": 0,
+   "best_streak": 0,
+   "tagged": {},
+   "history": [
+    1000.0
+   ],
+   "color_idx": 2,
+   "created": "2026-10-22"
+  },
+  "Player 4": {
+   "rating": 1006.603638659127,
+   "peak": 1024.6722064727978,
+   "matches": 4,
+   "losses": 1,
+   "survived": 3,
+   "total_hold": 62.396333333332905,
+   "longest_hold": 14.005333333333343,
+   "longest_hold_date": "2026-10-22 13:25",
+   "time_played": 480.0400000000097,
+   "tags_made": 37,
+   "times_tagged": 38,
+   "pickups": 2,
+   "streak": 0,
+   "best_streak": 3,
+   "tagged": {
+    "Anant": 34,
+    "Player 1": 2,
+    "Leon": 1
+   },
+   "history": [
+    1000.0,
+    1009.7,
+    1019.3,
+    1024.7,
+    1006.6
+   ],
+   "color_idx": 3,
+   "created": "2026-10-22"
+  },
+  "Anant": {
+   "rating": 968.4472320102775,
+   "peak": 1000.0,
+   "matches": 7,
+   "losses": 4,
+   "survived": 3,
+   "total_hold": 258.7649999999967,
+   "longest_hold": 120.00066666666513,
+   "longest_hold_date": "2026-10-22 13:38",
+   "time_played": 840.0720000000134,
+   "tags_made": 50,
+   "times_tagged": 50,
+   "pickups": 25,
+   "streak": 0,
+   "best_streak": 2,
+   "tagged": {
+    "Player 1": 12,
+    "Leon": 2,
+    "Player 4": 35,
+    "Aadit": 1
+   },
+   "history": [
+    1000.0,
+    983.6,
+    968.1,
+    988.8,
+    972.3,
+    977.7,
+    988.6,
+    968.4
+   ],
+   "color_idx": 0,
+   "created": "2026-10-22"
+  },
+  "Leon": {
+   "rating": 1028.3901360793616,
+   "peak": 1028.3901360793616,
+   "matches": 4,
+   "losses": 0,
+   "survived": 4,
+   "total_hold": 105.6210000000007,
+   "longest_hold": 64.21266666666743,
+   "longest_hold_date": "2026-10-22 13:01",
+   "time_played": 480.0366666666731,
+   "tags_made": 6,
+   "times_tagged": 5,
+   "pickups": 3,
+   "streak": 4,
+   "best_streak": 4,
+   "tagged": {
+    "Anant": 4,
+    "Aadit": 2
+   },
+   "history": [
+    1000.0,
+    1003.6,
+    1009.7,
+    1018.9,
+    1028.4
+   ],
+   "color_idx": 1,
+   "created": "2026-10-22"
+  },
+  "Aadit": {
+   "rating": 990.6394730565812,
+   "peak": 1000.0,
+   "matches": 2,
+   "losses": 1,
+   "survived": 1,
+   "total_hold": 100.50966666666856,
+   "longest_hold": 46.41433333333341,
+   "longest_hold_date": "2026-10-22 13:29",
+   "time_played": 240.01533333333413,
+   "tags_made": 3,
+   "times_tagged": 3,
+   "pickups": 5,
+   "streak": 1,
+   "best_streak": 1,
+   "tagged": {
+    "Leon": 2,
+    "Anant": 1
+   },
+   "history": [
+    1000.0,
+    980.0,
+    990.6
+   ],
+   "color_idx": 2,
+   "created": "2026-10-22"
+  }
+ },
+ "history": [
+  {
+   "date": "2026-10-22 12:33",
+   "duration": 120.0,
+   "players": [
+    "Player 1",
+    "Player 2"
+   ],
+   "loser": "Player 1",
+   "map": "desert",
+   "holds": {
+    "Player 1": 104.9,
+    "Player 2": 15.2
+   },
+   "best": {
+    "Player 1": 71.1,
+    "Player 2": 6.0
+   },
+   "delta": {
+    "Player 1": -19.6,
+    "Player 2": 19.6
+   }
+  },
+  {
+   "date": "2026-10-22 12:36",
+   "duration": 120.0,
+   "players": [
+    "Player 1",
+    "Player 2"
+   ],
+   "loser": "Player 1",
+   "map": "taiga",
+   "holds": {
+    "Player 1": 99.1,
+    "Player 2": 20.9
+   },
+   "best": {
+    "Player 1": 79.5,
+    "Player 2": 7.8
+   },
+   "delta": {
+    "Player 1": -17.0,
+    "Player 2": 17.0
+   }
+  },
+  {
+   "date": "2026-10-22 12:40",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Player 1",
+    "Player 4"
+   ],
+   "loser": "Anant",
+   "map": "taiga",
+   "holds": {
+    "Anant": 36.3,
+    "Player 1": 72.3,
+    "Player 4": 11.4
+   },
+   "best": {
+    "Anant": 15.2,
+    "Player 1": 33.6,
+    "Player 4": 10.0
+   },
+   "delta": {
+    "Anant": -16.4,
+    "Player 1": 6.7,
+    "Player 4": 9.7
+   }
+  },
+  {
+   "date": "2026-10-22 12:55",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Player 1",
+    "Player 4"
+   ],
+   "loser": "Anant",
+   "map": "desert",
+   "holds": {
+    "Anant": 19.2,
+    "Player 1": 100.8,
+    "Player 4": 0.0
+   },
+   "best": {
+    "Anant": 12.0,
+    "Player 1": 56.8,
+    "Player 4": 0.0
+   },
+   "delta": {
+    "Anant": -15.4,
+    "Player 1": 5.8,
+    "Player 4": 9.6
+   }
+  },
+  {
+   "date": "2026-10-22 12:58",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Player 1"
+   ],
+   "loser": "Player 1",
+   "map": "forest",
+   "holds": {
+    "Anant": 7.7,
+    "Player 1": 112.3
+   },
+   "best": {
+    "Anant": 6.0,
+    "Player 1": 67.8
+   },
+   "delta": {
+    "Anant": 20.6,
+    "Player 1": -20.6
+   }
+  },
+  {
+   "date": "2026-10-22 13:01",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Player 1",
+    "Player 4",
+    "Leon"
+   ],
+   "loser": "Anant",
+   "map": "forest",
+   "holds": {
+    "Anant": 30.9,
+    "Player 1": 1.2,
+    "Player 4": 20.3,
+    "Leon": 67.6
+   },
+   "best": {
+    "Anant": 4.7,
+    "Player 1": 1.2,
+    "Player 4": 1.6,
+    "Leon": 64.2
+   },
+   "delta": {
+    "Anant": -16.5,
+    "Player 1": 7.5,
+    "Player 4": 5.3,
+    "Leon": 3.6
+   }
+  },
+  {
+   "date": "2026-10-22 13:25",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Player 1",
+    "Player 4",
+    "Leon"
+   ],
+   "loser": "Player 4",
+   "map": "forest",
+   "holds": {
+    "Anant": 41.3,
+    "Player 1": 26.2,
+    "Player 4": 30.7,
+    "Leon": 21.8
+   },
+   "best": {
+    "Anant": 13.5,
+    "Player 1": 15.0,
+    "Player 4": 14.0,
+    "Leon": 21.8
+   },
+   "delta": {
+    "Anant": 5.4,
+    "Player 1": 6.5,
+    "Player 4": -18.1,
+    "Leon": 6.1
+   }
+  },
+  {
+   "date": "2026-10-22 13:29",
+   "duration": 120.0,
+   "players": [
+    "Leon",
+    "Aadit",
+    "Anant"
+   ],
+   "loser": "Aadit",
+   "map": "desert",
+   "holds": {
+    "Leon": 16.2,
+    "Aadit": 100.5,
+    "Anant": 3.3
+   },
+   "best": {
+    "Leon": 11.6,
+    "Aadit": 46.4,
+    "Anant": 3.3
+   },
+   "delta": {
+    "Leon": 9.2,
+    "Aadit": -20.0,
+    "Anant": 10.9
+   }
+  },
+  {
+   "date": "2026-10-22 13:38",
+   "duration": 120.0,
+   "players": [
+    "Leon",
+    "Aadit",
+    "Anant"
+   ],
+   "loser": "Anant",
+   "map": "desert",
+   "holds": {
+    "Leon": 0.0,
+    "Aadit": 0.0,
+    "Anant": 120.0
+   },
+   "best": {
+    "Leon": 0.0,
+    "Aadit": 0.0,
+    "Anant": 120.0
+   },
+   "delta": {
+    "Leon": 9.5,
+    "Aadit": 10.7,
+    "Anant": -20.2
+   }
+  }
+ ],
+ "records": {
+  "longest_hold": {
+   "name": "Anant",
+   "secs": 120.00066666666513,
+   "date": "2026-10-22 13:38"
+  }
+ }
+}
