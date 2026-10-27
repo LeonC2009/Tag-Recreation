@@ -1854,8 +1854,9 @@ class App:
 
     def draw_player(self, g, p, cx, cy):
         scr = self.screen
+        view_w, view_h = scr.get_size()
         sx, sy = int(p.x - cx), int(p.y - cy)
-        if not (-60 < sx < W + 60 and -90 < sy < H + 80):
+        if not (-60 < sx < view_w + 60 and -90 < sy < view_h + 80):
             return
         moving = p.on_ground and abs(p.vx) > 20
         amp = min(1.0, abs(p.vx) / 160.0) if moving else 0.0
