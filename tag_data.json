@@ -18,15 +18,15 @@
   "theme": "desert"
  },
  "slots": [
-  "Leon",
-  "Aadit",
   "Anant",
-  "Leon"
+  "Aadit",
+  "Leon",
+  "Player 4"
  ],
  "enabled": [
   true,
   true,
-  false,
+  true,
   false
  ],
  "dash_keys": [
@@ -148,25 +148,25 @@
    "created": "2026-10-22"
   },
   "Anant": {
-   "rating": 968.4472320102775,
+   "rating": 921.7012981124685,
    "peak": 1000.0,
-   "matches": 7,
-   "losses": 4,
-   "survived": 3,
-   "total_hold": 258.7649999999967,
+   "matches": 15,
+   "losses": 9,
+   "survived": 6,
+   "total_hold": 824.5346666666695,
    "longest_hold": 120.00066666666513,
    "longest_hold_date": "2026-10-22 13:38",
-   "time_played": 840.0720000000134,
-   "tags_made": 50,
-   "times_tagged": 50,
-   "pickups": 25,
+   "time_played": 1800.1706666666994,
+   "tags_made": 82,
+   "times_tagged": 83,
+   "pickups": 56,
    "streak": 0,
    "best_streak": 2,
    "tagged": {
     "Player 1": 12,
-    "Leon": 2,
+    "Leon": 13,
     "Player 4": 35,
-    "Aadit": 1
+    "Aadit": 22
    },
    "history": [
     1000.0,
@@ -176,63 +176,87 @@
     972.3,
     977.7,
     988.6,
-    968.4
+    968.4,
+    951.7,
+    937.4,
+    948.7,
+    933.9,
+    942.8,
+    928.6,
+    936.4,
+    921.7
    ],
    "color_idx": 0,
    "created": "2026-10-22"
   },
   "Leon": {
-   "rating": 1028.3901360793616,
-   "peak": 1028.3901360793616,
-   "matches": 4,
-   "losses": 0,
-   "survived": 4,
-   "total_hold": 105.6210000000007,
+   "rating": 1059.6960571006282,
+   "peak": 1071.9498052703173,
+   "matches": 12,
+   "losses": 1,
+   "survived": 11,
+   "total_hold": 230.0693333333334,
    "longest_hold": 64.21266666666743,
    "longest_hold_date": "2026-10-22 13:01",
-   "time_played": 480.0366666666731,
-   "tags_made": 6,
-   "times_tagged": 5,
-   "pickups": 3,
-   "streak": 4,
-   "best_streak": 4,
+   "time_played": 1440.135333333359,
+   "tags_made": 25,
+   "times_tagged": 24,
+   "pickups": 29,
+   "streak": 1,
+   "best_streak": 10,
    "tagged": {
-    "Anant": 4,
-    "Aadit": 2
+    "Anant": 15,
+    "Aadit": 10
    },
    "history": [
     1000.0,
     1003.6,
     1009.7,
     1018.9,
-    1028.4
+    1028.4,
+    1036.4,
+    1043.7,
+    1051.2,
+    1058.4,
+    1066.4,
+    1071.9,
+    1052.7,
+    1059.7
    ],
    "color_idx": 1,
    "created": "2026-10-22"
   },
   "Aadit": {
-   "rating": 990.6394730565812,
-   "peak": 1000.0,
-   "matches": 2,
-   "losses": 1,
-   "survived": 1,
-   "total_hold": 100.50966666666856,
+   "rating": 1006.0794859331236,
+   "peak": 1006.3108732462125,
+   "matches": 10,
+   "losses": 3,
+   "survived": 7,
+   "total_hold": 370.3903333333354,
    "longest_hold": 46.41433333333341,
    "longest_hold_date": "2026-10-22 13:29",
-   "time_played": 240.01533333333413,
-   "tags_made": 3,
-   "times_tagged": 3,
-   "pickups": 5,
-   "streak": 1,
-   "best_streak": 1,
+   "time_played": 1200.1140000000203,
+   "tags_made": 33,
+   "times_tagged": 32,
+   "pickups": 51,
+   "streak": 3,
+   "best_streak": 3,
    "tagged": {
-    "Leon": 2,
-    "Anant": 1
+    "Leon": 10,
+    "Anant": 23
    },
    "history": [
     1000.0,
     980.0,
-    990.6
+    990.6,
+    999.3,
+    1006.3,
+    987.6,
+    995.2,
+    978.3,
+    987.0,
+    998.4,
+    1006.1
    ],
    "color_idx": 2,
    "created": "2026-10-22"
@@ -467,6 +491,214 @@
     "Leon": 9.5,
     "Aadit": 10.7,
     "Anant": -20.2
+   }
+  },
+  {
+   "date": "2026-10-27 11:45",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Aadit",
+    "Leon"
+   ],
+   "loser": "Anant",
+   "map": "desert",
+   "holds": {
+    "Anant": 89.2,
+    "Aadit": 19.2,
+    "Leon": 11.6
+   },
+   "best": {
+    "Anant": 44.5,
+    "Aadit": 9.7,
+    "Leon": 7.5
+   },
+   "delta": {
+    "Anant": -16.7,
+    "Aadit": 8.7,
+    "Leon": 8.0
+   }
+  },
+  {
+   "date": "2026-10-27 11:47",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Aadit",
+    "Leon"
+   ],
+   "loser": "Anant",
+   "map": "desert",
+   "holds": {
+    "Anant": 68.1,
+    "Aadit": 38.0,
+    "Leon": 13.9
+   },
+   "best": {
+    "Anant": 35.2,
+    "Aadit": 15.7,
+    "Leon": 10.0
+   },
+   "delta": {
+    "Anant": -14.3,
+    "Aadit": 7.0,
+    "Leon": 7.3
+   }
+  },
+  {
+   "date": "2026-10-27 11:49",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Aadit",
+    "Leon"
+   ],
+   "loser": "Aadit",
+   "map": "desert",
+   "holds": {
+    "Anant": 16.3,
+    "Aadit": 70.3,
+    "Leon": 33.4
+   },
+   "best": {
+    "Anant": 9.9,
+    "Aadit": 31.4,
+    "Leon": 29.5
+   },
+   "delta": {
+    "Anant": 11.3,
+    "Aadit": -18.8,
+    "Leon": 7.5
+   }
+  },
+  {
+   "date": "2026-10-27 11:51",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Aadit",
+    "Leon"
+   ],
+   "loser": "Anant",
+   "map": "desert",
+   "holds": {
+    "Anant": 84.1,
+    "Aadit": 29.4,
+    "Leon": 6.5
+   },
+   "best": {
+    "Anant": 24.5,
+    "Aadit": 27.0,
+    "Leon": 2.0
+   },
+   "delta": {
+    "Anant": -14.8,
+    "Aadit": 7.7,
+    "Leon": 7.1
+   }
+  },
+  {
+   "date": "2026-10-27 11:54",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Aadit",
+    "Leon"
+   ],
+   "loser": "Aadit",
+   "map": "desert",
+   "holds": {
+    "Anant": 47.2,
+    "Aadit": 63.3,
+    "Leon": 9.5
+   },
+   "best": {
+    "Anant": 21.5,
+    "Aadit": 33.3,
+    "Leon": 5.3
+   },
+   "delta": {
+    "Anant": 8.9,
+    "Aadit": -17.0,
+    "Leon": 8.1
+   }
+  },
+  {
+   "date": "2026-10-27 11:56",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Aadit",
+    "Leon"
+   ],
+   "loser": "Anant",
+   "map": "desert",
+   "holds": {
+    "Anant": 74.5,
+    "Aadit": 12.2,
+    "Leon": 33.3
+   },
+   "best": {
+    "Anant": 49.1,
+    "Aadit": 10.2,
+    "Leon": 32.5
+   },
+   "delta": {
+    "Anant": -14.2,
+    "Aadit": 8.7,
+    "Leon": 5.5
+   }
+  },
+  {
+   "date": "2026-10-27 12:00",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Aadit",
+    "Leon"
+   ],
+   "loser": "Leon",
+   "map": "desert",
+   "holds": {
+    "Anant": 85.7,
+    "Aadit": 19.4,
+    "Leon": 14.9
+   },
+   "best": {
+    "Anant": 37.8,
+    "Aadit": 14.6,
+    "Leon": 8.2
+   },
+   "delta": {
+    "Anant": 7.8,
+    "Aadit": 11.5,
+    "Leon": -19.2
+   }
+  },
+  {
+   "date": "2026-10-27 12:02",
+   "duration": 120.0,
+   "players": [
+    "Anant",
+    "Aadit",
+    "Leon"
+   ],
+   "loser": "Anant",
+   "map": "desert",
+   "holds": {
+    "Anant": 100.5,
+    "Aadit": 18.1,
+    "Leon": 1.4
+   },
+   "best": {
+    "Anant": 52.9,
+    "Aadit": 13.2,
+    "Leon": 1.4
+   },
+   "delta": {
+    "Anant": -14.7,
+    "Aadit": 7.7,
+    "Leon": 7.0
    }
   }
  ],
