@@ -366,6 +366,14 @@ SPR_W = 34                       # on-screen sprite width (world pixels)
 SPR_H = int(SPR_W * 70 / 71)
 LEG_H = 9                        # how far the legs reach below the sprite body
 SKIN = (11, 52, 66)
+SKIN_STYLES = ("classic", "durag", "crown", "headphones", "shades")
+SKIN_LABELS = {
+    "classic": "Classic",
+    "durag": "Durag",
+    "crown": "Crown",
+    "headphones": "Headphones",
+    "shades": "Shades",
+}
 RESERVED_KEYS = (pygame.K_ESCAPE, pygame.K_F11, pygame.K_RETURN)
 
 COLORS = [(235, 64, 52), (52, 120, 246), (250, 200, 40), (60, 200, 90)]
@@ -428,7 +436,7 @@ SETTINGS_DEF = [
     ("it_bonus", "'It' speed bonus", 0, 0.5, 0.05, 0.10, "{:.0%}"),
 ]
 DEFAULT_SETTINGS = {d[0]: d[5] for d in SETTINGS_DEF}
-DEFAULT_SETTINGS.update(buffs_on=True, theme="random")
+DEFAULT_SETTINGS.update(buffs_on=True, theme="random", motion_blur=0)
 
 PICKUP_TYPES = {
     "speed": ((70, 170, 255), "SPD"),
@@ -456,7 +464,7 @@ def new_profile(color_idx):
     return dict(rating=START_RATING, peak=START_RATING, matches=0, losses=0, survived=0,
                 total_hold=0.0, longest_hold=0.0, longest_hold_date="", time_played=0.0,
                 tags_made=0, times_tagged=0, pickups=0, streak=0, best_streak=0,
-                tagged={}, history=[START_RATING], color_idx=color_idx,
+                tagged={}, history=[START_RATING], color_idx=color_idx, skin="classic",
                 created=datetime.now().strftime("%Y-%m-%d"))
 
 
@@ -481,6 +489,8 @@ def load_data():
             for name, p in raw["profiles"].items():
                 base = new_profile(len(d["profiles"]) % 4)
                 base.update(p)
+                if base.get("skin") not in SKIN_STYLES:
+                    base["skin"] = "classic"
                 d["profiles"][name] = base
         d["slots"] = (raw.get("slots", d["slots"]) + [None] * 4)[:4]
         d["enabled"] = (raw.get("enabled", d["enabled"]) + [False] * 4)[:4]
@@ -1060,14 +1070,16 @@ class Game:
                             self.pickups.remove(pk)
                             break
         # particles
-        for pt in self.parts[:]:
+        alive_parts = []
+        for pt in self.parts:
             pt[4] -= dt
             if pt[4] <= 0:
-                self.parts.remove(pt)
                 continue
             pt[0] += pt[2] * dt
             pt[1] += pt[3] * dt
             pt[3] += 500 * dt
+            alive_parts.append(pt)
+        self.parts = alive_parts
         self.tag_flash = max(0, self.tag_flash - dt)
         self.update_camera(dt)
         if self.time_left <= 0:
@@ -1108,22 +1120,66 @@ class App:
         self.menu_t = 0.0
         self.menu_sky = None
         self.t_acc = 0.0
+        self.skin_profile = next(iter(self.data["profiles"]))
+        self.game_view = pygame.Surface((math.ceil(W / ZOOM_MIN), math.ceil(H / ZOOM_MIN)))
+        self.scaled_view = pygame.Surface((W, H))
+        self.motion_frame = None
+        self.motion_frame_valid = False
 
     # ---- sprites
-    def sprite(self, slot, w=SPR_W, flip=False):
+    def sprite(self, slot, w=SPR_W, flip=False, skin="classic"):
         """Player sprite scaled to width w (cached). The artwork faces left; flip=True faces right."""
-        k = (slot, w, flip)
+        if skin not in SKIN_STYLES:
+            skin = "classic"
+        k = (slot, w, flip, skin)
         if k not in self.sprites:
             base = self.sprites.get(("raw", slot))
             if base is None:
                 base = pygame.image.load(io.BytesIO(base64.b64decode("".join(SPRITE_B64[slot]))), "x.png").convert_alpha()
                 self.sprites[("raw", slot)] = base
+            if skin != "classic":
+                base = base.copy()
+                if skin == "durag":
+                    cloth = ((35, 155, 225), (220, 65, 92), (145, 85, 220), (235, 155, 40))[slot % 4]
+                    shadow = (24, 27, 47)
+                    pygame.draw.polygon(base, shadow, [(5, 21), (55, 21), (65, 25), (61, 33), (9, 33)])
+                    pygame.draw.polygon(base, cloth, [(8, 22), (54, 22), (61, 26), (57, 30), (10, 30)])
+                    pygame.draw.polygon(base, shadow, [(53, 23), (65, 25), (70, 42), (63, 39), (58, 31)])
+                    pygame.draw.polygon(base, cloth, [(56, 25), (63, 27), (67, 38), (62, 35), (58, 30)])
+                    highlight = tuple(min(255, c + 65) for c in cloth)
+                    pygame.draw.line(base, highlight, (13, 23), (51, 23), 1)
+                    pygame.draw.line(base, shadow, (14, 29), (52, 29), 1)
+                    pygame.draw.circle(base, highlight, (58, 26), 2)
+                elif skin == "crown":
+                    gold = (255, 195, 55)
+                    pygame.draw.polygon(base, (67, 40, 76), [(15, 22), (18, 8), (29, 17), (37, 4),
+                                                              (47, 17), (57, 9), (56, 23)])
+                    pygame.draw.polygon(base, gold, [(19, 20), (21, 12), (30, 19), (37, 8),
+                                                     (46, 19), (54, 13), (52, 21)])
+                    pygame.draw.rect(base, (255, 226, 130), (20, 20, 33, 4))
+                    pygame.draw.circle(base, (255, 255, 235), (37, 13), 2)
+                elif skin == "headphones":
+                    pygame.draw.arc(base, (28, 34, 57), (9, 11, 53, 46), math.pi, math.tau, 5)
+                    pygame.draw.circle(base, (28, 34, 57), (9, 34), 8)
+                    pygame.draw.circle(base, (28, 34, 57), (62, 34), 8)
+                    pygame.draw.circle(base, (125, 100, 245), (9, 34), 5)
+                    pygame.draw.circle(base, (125, 100, 245), (62, 34), 5)
+                    pygame.draw.circle(base, (215, 205, 255), (9, 34), 2)
+                    pygame.draw.circle(base, (215, 205, 255), (62, 34), 2)
+                elif skin == "shades":
+                    pygame.draw.polygon(base, (20, 29, 53), [(10, 34), (32, 35), (34, 43), (28, 47),
+                                                             (14, 45)])
+                    pygame.draw.polygon(base, (20, 29, 53), [(37, 35), (60, 34), (57, 45), (43, 47),
+                                                             (37, 43)])
+                    pygame.draw.line(base, (20, 29, 53), (32, 37), (39, 37), 3)
+                    pygame.draw.line(base, (125, 230, 255), (15, 37), (27, 38), 2)
+                    pygame.draw.line(base, (125, 230, 255), (43, 38), (55, 37), 2)
             img = pygame.transform.smoothscale(base, (w, max(1, int(w * base.get_height() / base.get_width()))))
             self.sprites[k] = pygame.transform.flip(img, True, False) if flip else img
         return self.sprites[k]
 
-    def icon(self, slot, center, w=40):
-        img = self.sprite(slot, w)
+    def icon(self, slot, center, w=40, skin="classic"):
+        img = self.sprite(slot, w, skin=skin)
         self.screen.blit(img, img.get_rect(center=center))
 
     # ---- drawing helpers
@@ -1190,11 +1246,12 @@ class App:
                 pygame.draw.line(self.menu_sky, c, (0, yy), (W, yy))
         self.screen.blit(self.menu_sky, (0, 0))
         rng = random.Random(4)
+        menu_theme = dict(plat=(72, 111, 158), top=(119, 181, 207))
         for i in range(9):
             y = 90 + i * 75
             w = rng.randint(220, 520)
             x = ((rng.randint(0, W) + self.menu_t * (20 + 8 * i) * (1 if i % 2 else -1)) % (W + w)) - w
-            self.platform_rect(x, y, w, THEMES["forest"])
+            self.platform_rect(x, y, w, menu_theme)
 
     def platform_rect(self, x, y, w, T):
         pygame.draw.rect(self.screen, T["plat"], (x, y, w, 9), border_radius=3)
@@ -1218,6 +1275,31 @@ class App:
             if names[idx] not in taken:
                 self.data["slots"][slot] = names[idx]
                 return
+
+    def open_skin_studio(self):
+        names = list(self.data["profiles"])
+        self.skin_profile = next(
+            (self.data["slots"][i] for i in range(4)
+             if self.data["enabled"][i] and self.data["slots"][i] in self.data["profiles"]),
+            names[0],
+        )
+        self.state = "skins"
+
+    def cycle_skin_profile(self, direction):
+        names = list(self.data["profiles"])
+        if not names:
+            return
+        try:
+            index = names.index(self.skin_profile)
+        except ValueError:
+            index = 0
+        self.skin_profile = names[(index + direction) % len(names)]
+
+    def set_profile_skin(self, skin):
+        if skin not in SKIN_STYLES:
+            return
+        self.profile(self.skin_profile)["skin"] = skin
+        save_data(self.data)
 
     # ---- main loop
     def run(self):
@@ -1279,6 +1361,18 @@ class App:
             self.rebind = None if waiting else slot
 
     def on_key(self, e):
+        if self.state == "skins":
+            if e.key == pygame.K_ESCAPE:
+                save_data(self.data)
+                self.state = "menu"
+            elif e.key in (pygame.K_LEFT, pygame.K_RIGHT):
+                current = self.profile(self.skin_profile).get("skin", "classic")
+                index = SKIN_STYLES.index(current) if current in SKIN_STYLES else 0
+                direction = 1 if e.key == pygame.K_RIGHT else -1
+                self.set_profile_skin(SKIN_STYLES[(index + direction) % len(SKIN_STYLES)])
+            elif e.key in (pygame.K_UP, pygame.K_DOWN):
+                self.cycle_skin_profile(1 if e.key == pygame.K_DOWN else -1)
+            return
         if self.rebind is not None and self.state in ("players", "settings"):
             self.try_rebind(e)
             return
@@ -1315,17 +1409,19 @@ class App:
         bob = math.sin(self.menu_t * 2) * 6
         self.t("TAG", 150, (W // 2, 120 + bob), (255, 255, 255), "center", True)
         self.t("no winners  -  only not-losers", 28, (W // 2, 205), (255, 255, 255), "center", True)
-        x, w = W // 2 - 190, 380
-        if self.button((x, 260, w, 58), "PLAY", 32, (40, 160, 90)):
+        if self.button((W // 2 - 210, 260, 420, 62), "PLAY", 32, (40, 160, 90)):
             self.start_game()
-        if self.button((x, 332, w, 52), "PLAYERS & CONTROLS", 26):
+        left, right, width = W // 2 - 290, W // 2 + 10, 280
+        if self.button((left, 338, width, 54), "PLAYERS & CONTROLS", 22):
             self.state = "players"
-        if self.button((x, 398, w, 52), "SETTINGS", 26):
+        if self.button((right, 338, width, 54), "SKIN STUDIO", 24, (105, 75, 175)):
+            self.open_skin_studio()
+        if self.button((left, 404, width, 50), "SETTINGS", 24):
             self.state = "settings"
-        if self.button((x, 464, w, 52), "STATS", 26):
+        if self.button((right, 404, width, 50), "STATS", 24):
             self.scroll = 0
             self.state = "stats"
-        if self.button((x, 530, w, 52), "QUIT", 26, (130, 50, 60)):
+        if self.button((W // 2 - 130, 466, 260, 48), "QUIT", 23, (130, 50, 60)):
             save_data(self.data)
             pygame.quit()
             sys.exit()
@@ -1334,13 +1430,88 @@ class App:
             on = self.data["enabled"][i] and self.data["slots"][i]
             px = W // 2 - 300 + i * 150
             if on:
-                self.icon(i, (px, 636), 40)
+                self.icon(i, (px, 636), 40, self.profile(self.data["slots"][i]).get("skin", "classic"))
             else:
                 pygame.draw.circle(self.screen, (120, 130, 150), (px, 640), 14)
             if on:
                 nm = self.data["slots"][i]
                 self.t(nm, 18, (px, 662), (255, 255, 255), "midtop", True)
                 self.t("%d" % round(self.profile(nm)["rating"]), 18, (px, 682), (255, 255, 255), "midtop", True)
+
+    def s_skins(self, dt):
+        self.menu_bg(dt)
+        panel = pygame.Surface((1000, 555), pygame.SRCALPHA)
+        pygame.draw.rect(panel, (12, 19, 46, 244), panel.get_rect(), border_radius=28)
+        pygame.draw.rect(panel, (160, 190, 255, 100), panel.get_rect(), 2, border_radius=28)
+        self.screen.blit(panel, (140, 62))
+        self.t("SKIN STUDIO", 42, (W // 2, 86), anchor="center", shadow=True)
+        self.t("Choose a look for your profile", 19, (W // 2, 126), (190, 205, 235),
+               "center", bold=False)
+
+        names = list(self.data["profiles"])
+        if not names:
+            self.t("Create a profile first to customize a skin.", 24,
+                   (W // 2, 340), anchor="center")
+            if self.button((W // 2 - 110, 630, 220, 48), "BACK", 22):
+                self.state = "menu"
+            return
+        if self.skin_profile not in self.data["profiles"]:
+            self.skin_profile = names[0]
+        profile = self.profile(self.skin_profile)
+        skin = profile.get("skin", "classic")
+        if skin not in SKIN_STYLES:
+            skin = "classic"
+        skin_index = SKIN_STYLES.index(skin)
+        profile_index = names.index(self.skin_profile)
+        if self.button((430, 145, 52, 42), "<", 26):
+            self.cycle_skin_profile(-1)
+            profile = self.profile(self.skin_profile)
+            profile_index = names.index(self.skin_profile)
+            skin = profile.get("skin", "classic")
+            skin_index = SKIN_STYLES.index(skin) if skin in SKIN_STYLES else 0
+        self.t("%s  ·  PROFILE %d / %d" %
+               (self.skin_profile.upper(), profile_index + 1, len(names)), 19,
+               (W // 2, 156), (220, 230, 255), "center")
+        if self.button((798, 145, 52, 42), ">", 26):
+            self.cycle_skin_profile(1)
+            profile = self.profile(self.skin_profile)
+            profile_index = names.index(self.skin_profile)
+            skin = profile.get("skin", "classic")
+            skin_index = SKIN_STYLES.index(skin) if skin in SKIN_STYLES else 0
+
+        accent = (125, 185, 255) if skin == "classic" else (190, 145, 255)
+        pygame.draw.circle(self.screen, (36, 48, 83), (W // 2, 334), 142)
+        pygame.draw.circle(self.screen, accent, (W // 2, 334), 142, 2)
+        pygame.draw.ellipse(self.screen, (8, 12, 30), (W // 2 - 96, 439, 192, 22))
+        slot = profile.get("color_idx", 0) % 4
+        avatar = self.sprite(slot, 250, skin=skin)
+        self.screen.blit(avatar, avatar.get_rect(center=(W // 2, 325 + int(math.sin(self.menu_t * 2) * 4))))
+        if self.button((282, 315, 68, 76), "<", 46, (45, 59, 100)):
+            self.set_profile_skin(SKIN_STYLES[(skin_index - 1) % len(SKIN_STYLES)])
+        if self.button((930, 315, 68, 76), ">", 46, (45, 59, 100)):
+            self.set_profile_skin(SKIN_STYLES[(skin_index + 1) % len(SKIN_STYLES)])
+
+        skin = self.profile(self.skin_profile).get("skin", "classic")
+        skin_index = SKIN_STYLES.index(skin) if skin in SKIN_STYLES else 0
+        self.t(SKIN_LABELS[skin].upper(), 28, (W // 2, 474), (255, 255, 255), "center", True)
+        self.t("%d cosmetics  ·  use ← → to browse" % len(SKIN_STYLES), 16,
+               (W // 2, 507), (185, 198, 226), "center", bold=False)
+
+        chip_width, chip_gap = 142, 12
+        chip_x = (W - (chip_width * len(SKIN_STYLES) + chip_gap * (len(SKIN_STYLES) - 1))) // 2
+        for index, option in enumerate(SKIN_STYLES):
+            rect = (chip_x + index * (chip_width + chip_gap), 542, chip_width, 44)
+            if index == skin_index:
+                pygame.draw.rect(self.screen, (112, 80, 190), rect, border_radius=12)
+                pygame.draw.rect(self.screen, (220, 205, 255), rect, 2, border_radius=12)
+                self.t(SKIN_LABELS[option].upper(), 15, pygame.Rect(rect).center, anchor="center")
+            elif self.button(rect, SKIN_LABELS[option].upper(), 15, (43, 53, 86)):
+                self.set_profile_skin(option)
+        if self.button((W // 2 - 110, 630, 220, 48), "BACK", 22):
+            save_data(self.data)
+            self.state = "menu"
+        self.t("↑ ↓ switch profile", 15, (W // 2, 605), (180, 193, 221),
+               "center", bold=False)
 
     def s_players(self, dt):
         self.menu_bg(dt)
@@ -1354,7 +1525,9 @@ class App:
             pygame.draw.rect(s, (15, 20, 50, 190), s.get_rect(), border_radius=16)
             self.screen.blit(s, panel)
             cy = y + 48
-            self.icon(i, (panel.x + 46, cy - 4), 52)
+            nm = self.data["slots"][i]
+            skin = self.profile(nm).get("skin", "classic") if nm else "classic"
+            self.icon(i, (panel.x + 46, cy - 4), 52, skin)
             self.t(COLOR_NAMES[i], 26, (panel.x + 92, y + 16))
             self.t("Move: " + CONTROLS[i]["move"], 19, (panel.x + 92, y + 54), (200, 210, 235), bold=False)
             on = self.data["enabled"][i]
@@ -1364,7 +1537,6 @@ class App:
             self.dash_button((panel.x + 350, cy - 24, 200, 48), i, 22)
             if self.button((panel.x + 580, cy - 24, 44, 48), "<", 26):
                 self.cycle_profile(i, -1)
-            nm = self.data["slots"][i]
             self.t(nm or "(none)", 28, (panel.x + 745, y + 14), anchor="midtop", shadow=True)
             if nm:
                 p = self.profile(nm)
@@ -1425,8 +1597,8 @@ class App:
             self.dash_button((bx + 54, 530, 150, 48), i, 20)
         # 3) toggles + back
         on = S["buffs_on"]
-        bw, gap = 250, 24
-        x0 = (W - (4 * bw + 3 * gap)) // 2
+        bw, gap = 200, 20
+        x0 = (W - (5 * bw + 4 * gap)) // 2
         by = 616
         if self.button((x0, by, bw, 50), "Power-ups: " + ("ON" if on else "OFF"), 22,
                        (40, 150, 90) if on else (110, 60, 70)):
@@ -1434,13 +1606,20 @@ class App:
         opts = ["random", "forest", "desert", "taiga"]
         if self.button((x0 + (bw + gap), by, bw, 50), "Map: " + S["theme"].upper(), 22):
             S["theme"] = opts[(opts.index(S["theme"]) + 1) % 4]
-        if self.button((x0 + 2 * (bw + gap), by, bw, 50), "Reset defaults", 22, (130, 80, 50)):
+        blur = int(clamp(S.get("motion_blur", 0), 0, 2))
+        blur_labels = ("OFF", "LOW", "HIGH")
+        if self.button((x0 + 2 * (bw + gap), by, bw, 50),
+                       "Motion blur: " + blur_labels[blur], 20):
+            S["motion_blur"] = (blur + 1) % len(blur_labels)
+            self.motion_frame_valid = False
+        if self.button((x0 + 3 * (bw + gap), by, bw, 50), "Reset defaults", 20, (130, 80, 50)):
             keep = S["theme"]
             S.update(DEFAULT_SETTINGS)
             S["theme"] = keep
+            self.motion_frame_valid = False
             self.data["dash_keys"] = list(DEFAULT_DASH_KEYS)
             apply_dash_keys(self.data["dash_keys"])
-        if self.button((x0 + 3 * (bw + gap), by, bw, 50), "BACK", 24):
+        if self.button((x0 + 4 * (bw + gap), by, bw, 50), "BACK", 24):
             self.rebind = None
             save_data(self.data)
             self.state = "menu"
@@ -1470,6 +1649,7 @@ class App:
         theme = S["theme"] if S["theme"] in THEMES else random.choice(list(THEMES))
         self.roster = roster
         self.game = Game(S, roster, theme, random.randrange(1 << 30))
+        self.motion_frame_valid = False
         self.state = "game"
 
     def s_game(self, dt):
@@ -1563,7 +1743,8 @@ class App:
         for i, p in enumerate(rows):
             y = hdr_y + 40 + i * 52
             lose = p.name == r["loser"]
-            self.icon(p.slot, (cols[0] - 26, y + 14), 36)
+            self.icon(p.slot, (cols[0] - 26, y + 14), 36,
+                      self.profile(p.name).get("skin", "classic"))
             self.t(p.name + ("   (LOSER)" if lose else "   safe"), 26, (cols[0], y),
                    (255, 130, 130) if lose else (255, 255, 255))
             self.t(fmt_time(p.hold), 26, (cols[1], y))
@@ -1741,13 +1922,26 @@ class App:
         cx, cy, vw, vh, z = g.view()
         vwi, vhi = int(math.ceil(vw)), int(math.ceil(vh))
         real = self.screen
-        view = pygame.Surface((vwi, vhi))
+        view = self.game_view.subsurface((0, 0, vwi, vhi))
         self.screen = view
         try:
             self.draw_world(g, int(cx), int(cy), vwi, vhi)
         finally:
             self.screen = real
-        real.blit(pygame.transform.smoothscale(view, (W, H)), (0, 0))
+        pygame.transform.smoothscale(view, (W, H), self.scaled_view)
+        real.blit(self.scaled_view, (0, 0))
+        blur = int(clamp(g.S.get("motion_blur", 0), 0, 2))
+        if blur:
+            if self.motion_frame is None:
+                self.motion_frame = pygame.Surface((W, H))
+            if self.motion_frame_valid:
+                self.motion_frame.set_alpha((32, 64)[blur - 1])
+                real.blit(self.motion_frame, (0, 0))
+                self.motion_frame.set_alpha(None)
+            self.motion_frame.blit(real, (0, 0))
+            self.motion_frame_valid = True
+        else:
+            self.motion_frame_valid = False
         self.draw_offscreen(g, cx, cy, z)
         self.draw_hud(g)
         if g.tag_flash > 0:
@@ -1876,7 +2070,8 @@ class App:
             pygame.draw.line(scr, SKIN, (hx, hip_y + bob), (fx, fy), 5)
             pygame.draw.ellipse(scr, SKIN, (fx - 4 + p.facing * 1, fy - 2, 8, 4))
         # --- body sprite (artwork faces left, so flip when facing right)
-        img = self.sprite(p.slot, SPR_W, p.facing > 0)
+        profile = self.data["profiles"].get(p.name, {})
+        img = self.sprite(p.slot, SPR_W, p.facing > 0, profile.get("skin", "classic"))
         scr.blit(img, (sx - img.get_width() // 2, sy - LEG_H - img.get_height() + 1 + bob))
         body = (sx, int(sy - LEG_H - img.get_height() * 0.45 + bob))
         top = sy - LEG_H - img.get_height() + bob
@@ -1920,9 +2115,10 @@ class App:
         pygame.draw.rect(self.screen, (255, 255, 255), (W // 2 + 8, 92, 6, 18), border_radius=2)
         for i, p in enumerate(g.players):
             x, y = 14, 14 + i * 52
-            self.icon(p.slot, (x + 14, y + 16), 30)
+            profile = self.data["profiles"].get(p.name, {})
+            self.icon(p.slot, (x + 14, y + 16), 30, profile.get("skin", "classic"))
             self.t(p.name, 20, (x + 32, y), (255, 255, 255), shadow=True)
-            pr = self.data["profiles"].get(p.name)
+            pr = profile
             sub = "%d  |  it: %s" % (round(pr["rating"]) if pr else 0, fmt_time(p.hold))
             self.t(sub, 15, (x + 32, y + 22), (235, 240, 255), shadow=True, bold=False)
             bx = x + 240
